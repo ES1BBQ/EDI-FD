@@ -1,0 +1,238 @@
+﻿<!doctype html>
+<html lang="et">
+<head>
+
+    <meta charset="utf-8">
+    <title>ES1BBQ - ES ULL Välipäeva EDI logirakendus</title>
+    <meta content="Generate EDI logs for ES Open VUSHF Field Day" name="description">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <meta content="ES1BBQ Välipäeva EDI logirakendus" property="og:title">
+    <meta content="website" property="og:type">
+    <meta content="https://log.es1bbq.eu/apps/edi-fd/" property="og:url">
+    <meta content="" property="og:image">
+
+    <meta content='telephone=no' name='format-detection'>
+
+    <!--
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="static/images/icon.png">
+    -->
+
+    <link href="static/styles/logs.es1bbq.css" rel="stylesheet">
+
+</head>
+<body>
+
+<header>
+    <h1>ES ULL Välipäeva EDI logirakendus</h1>
+    Infoks: Rakendus salvestab andmed kohaliku veebilehitsejasse.
+</header>
+
+<div class="wrapper">
+    <div class="tabs-container">
+        <ul class="tabs-header">
+            <li>Seadistused</li>
+            <li class="default-tab">Logi</li>
+            <li>Tulem</li>
+            <li>Abi</li>
+        </ul>
+        <div class="tabs">
+            <div class="container framed tab" id="edi_header">
+                <div class="centered">
+                    <label for="TDate">Kuupäev:</label>
+                    <input id="TDate" type="date" placeholder="yyyy-mm-dd">
+                </div>
+                <div class="centered">
+                    <label for="PSect">Klass:</label>
+                    <input id="PSect" type="text">
+                </div>
+                <div class="centered">
+                    <label for="PBand">Sagedus:</label>
+                    <select id="PBand">
+                        <option value="50 Mhz">50 MHz</option>
+                        <option value="144 Mhz">144 MHz</option>
+                        <option value="432 Mhz">432 MHz</option>
+                        <option value="1.3 GHz">1296 MHz</option>
+                    </select>
+                </div>
+                <hr>
+                <div class="centered">
+                    <label for="PCall">Kutsung:</label>
+                    <input id="PCall" style="text-transform:uppercase" type="text">
+                </div>
+                <div class="centered">
+                    <label for="RName">Nimi:</label>
+                    <input id="RName" type="text">
+                </div>
+                <div class="centered">
+                    <label for="PWWLo">Lokaator: <button id="locate_me">&#8982;</button></label>
+                    <input id="PWWLo" style="text-transform:uppercase" type="text">
+                </div>
+                <div class="centered">
+                    <label for="RCoun">Riik:</label>
+                    <select id="RCoun">
+                        <option>Estonia</option>
+                        <option>Finland</option>
+                        <option>Latvia</option>
+                    </select>
+                </div>
+                <hr>
+                <div class="centered">
+                    <label for="STXEq">Saatja (jaama mudel):</label>
+                    <input id="STXEq" type="text">
+                </div>
+                <div class="centered">
+                    <label for="SPowe">Võimsus:</label>
+                    <input id="SPowe" type="number">
+                </div>
+                <div class="centered">
+                    <label for="SRXEq">Vastuvõtja (jaama mudel):</label>
+                    <input id="SRXEq" type="text">
+                </div>
+                <div class="centered">
+                    <label for="SAnte">Antenn:</label>
+                    <input id="SAnte" type="text">
+                </div>
+                <div class="centered">
+                    <label for="SAntH">Antenni kõrgus:</label>
+                    <input id="SAntH" type="number">
+                </div>
+                <hr>
+                <div class="centered">
+                    <label for="remarks">Märkused:</label>
+                    <input id="remarks" type="text">
+                </div>
+            </div>
+            <div class="container framed tab" id="edi_log">
+                <div class="centered">
+                    <div class="my_info">
+                        <div class="framed">
+                            Minu Kutsung:
+                            <div id="my_callsign"></div>
+                            <div id="my_callsign_fonetic"></div>
+                        </div>
+                        <div class="framed">
+                            Minu Lokaator:
+                            <div id="my_locator"></div>
+                            <div id="my_locator_fonetic"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div>
+                        <button id="log_reset">Puhasta logi</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="centered" id="log_entry">
+                    <div>Saadetud QSO</div>
+                    <div>Aeg</div>
+                    <div>Kutsung</div>
+                    <div>QTH</div>
+                    <div>Saadud QSO</div>
+                    <div>Režiim</div>
+                    <div>Saadetud RST</div>
+                    <div>Saadud RST</div>
+                    <div></div>
+                    <div><input class="short" id="log_tx_qso" type="text"></div>
+                    <div><input class="short" id="log_time" type="text"></div>
+                    <div><input autofocus class="short" id="log_callsign" maxlength="10"
+                                style="text-transform:uppercase" type="text"></div>
+                    <div><input class="short" id="log_loc" maxlength="6" style="text-transform:uppercase" type="text"></div>
+                    <div><input class="short" id="log_rx_qso" type="text"></div>
+                    <div>
+                        <select id="log_mode" class="short">
+                            <option value="0">Teadmata</option>
+                            <option value="1">SSB</option>
+                            <option value="2">CW</option>
+                            <option value="5">AM</option>
+                            <option value="6" selected>FM</option>
+                            <option value="7">RTTY</option>
+                            <option value="8">SSTV</option>
+                        </select></div>
+                    <div><input class="short" id="log_tx_rst" maxlength="3" placeholder="59" type="text" value="59"></div>
+                    <div><input class="short" id="log_rx_rst" maxlength="3" placeholder="59" type="text" value="59"></div>
+                    <div>
+                        <button class="short" id="log_write">&raquo;</button>
+                    </div>
+                </div>
+                <div class="centered" id="log"></div>
+            </div>
+            <div class="container framed tab" id="final_edi">
+                <div class="centered">
+                    <textarea name="logifail" id="finalEDI"></textarea>
+                </div>
+                <div class="centered">
+                    <a href="#" id="downloadEDI" class="button">Lae alla log.edi</a>
+                </div>
+            </div>
+            <div class="container framed tab" id="help">
+
+                <h2>Logi sisestus</h2>
+                <p>
+                    <u>Kõik väljad on vajalikud!</u>
+                    Logi sisestamisel täidetakse tühi aja väli automaatselt UTC ajaga. Sama kehtib välja
+                    valides tab või enter klahvi vajutades. RST väljadele sisestatakse vaikeväärtus 59 kui väljad on
+                    täitamata tab või enter klahvi vajutades.
+                    <br><br>
+                    <b>Kutsungit</b> ja <b>Lokaatorit</b> <u>pole vaja</u> sisestada suurte tähtedega,
+                    seda tehakse automaatselt.
+                    <br><br>
+                    Režiimid:
+                    <table>
+                        <tr><th>Kood</th><th>Saatmine</th><th>Vastuvõtmine</th></tr>
+                        <tr><td>0</td><td>Teadmata</td><td>Teadmata</td></tr>
+                        <tr><td>1</td><td>SSB</td><td>SSB</td></tr>
+                        <tr><td>2</td><td>CW</td><td>CW</td></tr>
+                        <tr><td>3</td><td>SSB</td><td>CW</td></tr>
+                        <tr><td>4</td><td>CW</td><td>SSB</td></tr>
+                        <tr><td>5</td><td>AM</td><td>AM</td></tr>
+                        <tr><td>6</td><td>FM</td><td>FM</td></tr>
+                        <tr><td>7</td><td>RTTY</td><td>RTTY</td></tr>
+                        <tr><td>8</td><td>SSTV</td><td>SSTV</td></tr>
+                        <tr><td>9</td><td>ATV</td><td>ATV</td></tr>
+                    </table>
+                </p>
+                <hr>
+                <h2>Seadistused</h2>
+                <p>
+                    Seadistusjaotuses on vajalik kõikide väljade täitmine v.a märkmed. Osad veebilehitsejad sisaldavad
+                    kuupäeva valiku võimalust. Kuupäeva valikuta kasutajatele kuvatakse sobiv kuupäeva formaat.
+                    <br><br>
+                    <b>Kutsungit</b> ja <b>Lokaatorit</b> <u>pole vaja</u> sisestada suurte tähtedega,
+                    seda tehakse automaatselt.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div>
+        <div>
+            <label for="finnish_fonetics">Soome foneetika:</label>
+            <label class="switch">
+                <input type="checkbox" id="finnish_fonetics">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div>
+
+        </div>
+    </div>
+    &copy; 2020-2021 ES1BBQ
+</footer>
+
+<script src="static/scripts/edi-fd.js" type="application/javascript"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KQRD9B6RD8"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-KQRD9B6RD8');
+</script>
+
+</body>
+</html>
