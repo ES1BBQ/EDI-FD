@@ -172,7 +172,7 @@
             finalEDI = finalEDI.concat("\n" + localStorage['TDate'].substr(2).replace(/-/g, '') + ";" + i[1] + ";" + i[2] + ";" + i[5] + ";" + i[6] + ";" + i [0] + ";" + i[7] + ";" + i[4] + ";;" + i[3] + ";0;;N;N;");
         };
         var finalEDI = "[REG1TEST;1]\n";
-        finalEDI = finalEDI.concat("TName=ULL kv ", (localStorage['PBand']) ? localStorage['PBand'] : document.getElementById('PBand').value, "\n");
+        finalEDI = finalEDI.concat("TName=ESFD ", (localStorage['PBand']) ? localStorage['PBand'] : document.getElementById('PBand').value, "\n");
         finalEDI = finalEDI.concat("TDate=", (localStorage['TDate']) ? localStorage['TDate'].replace(/-/g, '') : '', ";", (localStorage['TDate']) ? localStorage['TDate'].replace(/-/g, '') : '', "\n");
         finalEDI = finalEDI.concat("PCall=", (localStorage['PCall']) ? localStorage['PCall'].toUpperCase() : '', "\n");
         finalEDI = finalEDI.concat("PWWLo=", (localStorage['PWWLo']) ? localStorage['PWWLo'].toUpperCase() : '', "\n");
