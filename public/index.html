@@ -126,21 +126,23 @@
                 </div>
                 <hr>
                 <div class="centered" id="log_entry">
-                    <div>Saadetud QSO</div>
                     <div>Aeg</div>
                     <div>Kutsung</div>
-                    <div>QTH</div>
-                    <div>Saadud QSO</div>
-                    <div>Režiim</div>
-                    <div>Saadetud RST</div>
+                    <div>Antud RST</div>
+                    <div>Antud Nr</div>
                     <div>Saadud RST</div>
+                    <div>Saadud Nr</div>
+                    <div>QTH</div>
+                    <div>Tööliik</div>
                     <div></div>
-                    <div><input class="short" id="log_tx_qso" type="text"></div>
                     <div><input class="short" id="log_time" type="text"></div>
                     <div><input autofocus class="short" id="log_callsign" maxlength="10"
                                 style="text-transform:uppercase" type="text"></div>
-                    <div><input class="short" id="log_loc" maxlength="6" style="text-transform:uppercase" type="text"></div>
+                    <div><input class="short" id="log_tx_rst" maxlength="3" placeholder="59" type="text" value="59"></div>
+                    <div><input class="short" id="log_tx_qso" type="text"></div>
+                    <div><input class="short" id="log_rx_rst" maxlength="3" placeholder="59" type="text" value="59"></div>
                     <div><input class="short" id="log_rx_qso" type="text"></div>
+                    <div><input class="short" id="log_loc" maxlength="6" style="text-transform:uppercase" type="text"></div>
                     <div>
                         <select id="log_mode" class="short">
                             <option value="0">Teadmata</option>
@@ -151,8 +153,6 @@
                             <option value="7">RTTY</option>
                             <option value="8">SSTV</option>
                         </select></div>
-                    <div><input class="short" id="log_tx_rst" maxlength="3" placeholder="59" type="text" value="59"></div>
-                    <div><input class="short" id="log_rx_rst" maxlength="3" placeholder="59" type="text" value="59"></div>
                     <div>
                         <button class="short" id="log_write">&raquo;</button>
                     </div>

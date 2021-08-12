@@ -152,6 +152,8 @@
     /** Method to generate/update EDI log and page */
     const updatePage = function () {
 
+        const QSORecords = JSON.parse(localStorage['QSORecords'] || "[]");
+
         /** Update my locator value */
         let loc = '';
         for (var i = 0; i < localStorage['PWWLo'].length; i++) {
@@ -168,8 +170,10 @@
         document.getElementById('my_callsign').innerHTML = localStorage['PCall'].toUpperCase();
         document.getElementById('my_callsign_fonetic').innerHTML = loc;
 
+        document.getElementById('log_tx_qso').value = zeroPad((QSORecords.length+1),3);
+
         const listQSORecords = function (i) {
-            finalEDI = finalEDI.concat("\n" + localStorage['TDate'].substr(2).replace(/-/g, '') + ";" + i[1] + ";" + i[2] + ";" + i[5] + ";" + i[6] + ";" + i [0] + ";" + i[7] + ";" + i[4] + ";;" + i[3] + ";0;;N;N;");
+            finalEDI = finalEDI.concat("\n" + localStorage['TDate'].substr(2).replace(/-/g, '') + ";" + i[0] + ";" + i[1] + ";" + i[7] + ";" + i[2] + ";" + i [3] + ";" + i[4] + ";" + i[5] + ";;" + i[6] + ";0;;N;N;");
         };
         var finalEDI = "[REG1TEST;1]\n";
         finalEDI = finalEDI.concat("TName=ESFD ", (localStorage['PBand']) ? localStorage['PBand'] : document.getElementById('PBand').value, "\n");
@@ -188,7 +192,7 @@
         finalEDI = finalEDI.concat("SAnte=", (localStorage['SAnte']) ? localStorage['SAnte'] : '', "\n");
         finalEDI = finalEDI.concat("SAntH=", (localStorage['SAntH']) ? localStorage['SAntH'] : '', "\n");
         finalEDI = finalEDI.concat("[Remarks]\n", (localStorage['remarks'] && localStorage['remarks'].length > 1) ? localStorage['remarks'] + "\n" : "");
-        const QSORecords = JSON.parse(localStorage['QSORecords'] || "[]");
+
         finalEDI = finalEDI + "[QSORecords;" + QSORecords.length + "]";
         QSORecords.forEach(x => listQSORecords(x));
         document.getElementById('finalEDI').value = finalEDI;
@@ -260,14 +264,14 @@
             document.getElementById('log_rx_rst').value.length > 0
         ) {
             QSORecords.push([
-                zeroPad(document.getElementById('log_tx_qso').value,3),
                 document.getElementById('log_time').value.replace(/:/g, ''),
                 document.getElementById('log_callsign').value.toUpperCase(),
-                document.getElementById('log_loc').value.toUpperCase(),
-                zeroPad(document.getElementById('log_rx_qso').value,3),
-                document.getElementById('log_mode').value,
                 document.getElementById('log_tx_rst').value,
-                document.getElementById('log_rx_rst').value
+                zeroPad(document.getElementById('log_tx_qso').value,3),
+                document.getElementById('log_rx_rst').value,
+                zeroPad(document.getElementById('log_rx_qso').value,3),
+                document.getElementById('log_loc').value.toUpperCase(),
+                document.getElementById('log_mode').value
             ]);
             localStorage['QSORecords'] = JSON.stringify(QSORecords);
 
@@ -302,7 +306,7 @@
         if (this.value.length > 0) this.classList.remove('missing');
         if (event.keyCode === 13) {
             event.preventDefault();
-            if (this.value.length > 0) document.getElementById("log_loc").focus();
+            if (this.value.length > 0) document.getElementById("log_tx_rst").focus();
         }
     });
     document.getElementById('log_loc').addEventListener("keydown", function (event) {
@@ -314,26 +318,43 @@
     });
     document.getElementById('log_mode').addEventListener("keydown", function (event) {
         if (this.value.length > 0) this.classList.remove('missing');
-        if (event.keyCode === 13) {
+        if ((event.keyCode === 13)||(event.keyCode === 9)) {
             event.preventDefault();
-            if (this.value.length > 0) document.getElementById("log_tx_rst").focus();
+            if (this.value.length > 0) addLog();
         }
     });
     document.getElementById('log_tx_rst').addEventListener("keydown", function (event) {
-        if ((event.keyCode === 13)||(event.keyCode === 9)) {
+        if (event.keyCode === 13) {
             event.preventDefault();
             if (this.value.length == 0) {
               this.value = '59';
               this.classList.remove('missing');
             }
-            document.getElementById("log_rx_rst").focus();
+            document.getElementById("log_tx_qso").focus();
+        }
+    });
+    document.getElementById('log_tx_qso').addEventListener("keydown", function (event) {
+        if (this.value.length > 0) this.classList.remove('missing');
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            if (this.value.length > 0) document.getElementById("log_rx_rst").focus();
         }
     });
     document.getElementById('log_rx_rst').addEventListener("keydown", function (event) {
-        if ((event.keyCode === 13)||(event.keyCode === 9)) {
+        if (event.keyCode === 13) {
             event.preventDefault();
-            if (this.value.length == 0) this.value = '59';
-            addLog();
+            if (this.value.length == 0) {
+              this.value = '59';
+              this.classList.remove('missing');
+            }
+            document.getElementById("log_rx_qso").focus();
+        }
+    });
+    document.getElementById('log_rx_qso').addEventListener("keydown", function (event) {
+        if (this.value.length > 0) this.classList.remove('missing');
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            if (this.value.length > 0) document.getElementById("log_loc").focus();
         }
     });
 
